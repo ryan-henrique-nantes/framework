@@ -1,9 +1,10 @@
-from tkinter import Tk
-from Frames_Enums.enums import Form_Type
 
-class TForm(Tk):
+from Frames_Enums.enums import Form_Type
+import tkinter as tk
+
+class TForm(tk.Tk):
     """Classe base para criação de formulários."""
-    def __init__(self, titulo: str, largura: int, altura: int, redimensionavel: bool = False, type: Form_Type = Form_Type.CENTRALIZED):
+    def __init__(self, titulo: str, largura: int, altura: int, icone: str = None, redimensionavel: bool = False, type: Form_Type = Form_Type.CENTRALIZED):
         """ Define uma janela principal para a aplicação."""
         super().__init__()
         self.on_create(event=None)
@@ -15,6 +16,9 @@ class TForm(Tk):
         elif type == Form_Type.FULL_SCREEN:
            self.attributes('-fullscreen', True)
         self.resizable(redimensionavel, redimensionavel)
+        if icone is not None:
+            photo = tk.PhotoImage(file = icone)
+            self.iconphoto(False, photo)
         self.__bind_events()
 
     def __bind_events(self):
