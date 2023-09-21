@@ -1,15 +1,16 @@
-
-from Frames_Enums.enums import Form_Type
+from tkinter import Tk
 import tkinter as tk
+import sys
+sys.path.append('utils')
+from Frames_Enums.enums import Form_Type
 
-class TForm(tk.Tk):
+class TForm(Tk):
     """Classe base para criação de formulários."""
-    def __init__(self, titulo: str, largura: int, altura: int, icone: str = None, redimensionavel: bool = False, type: Form_Type = Form_Type.CENTRALIZED):
+    def __init__(self, titulo: str, largura: int, altura: int, icone: str=None, redimensionavel: bool = False, type: Form_Type = Form_Type.CENTRALIZED):
         """ Define uma janela principal para a aplicação."""
         super().__init__()
-        self.on_create(event=None)
-        self.__altura = altura
-        self.__largura = largura
+        self.altura = altura
+        self.largura = largura
         self.wm_title(titulo)
         if type == Form_Type.CENTRALIZED:
             self.__centralize()
@@ -19,8 +20,38 @@ class TForm(tk.Tk):
         if icone is not None:
             photo = tk.PhotoImage(file = icone)
             self.iconphoto(False, photo)
+        self.on_create()
         self.__bind_events()
+        self.on_show()
 
+    @property
+    def altura(self):
+        """Retorna a altura da janela."""
+        return self.__altura
+    
+    @altura.setter
+    def altura(self, value: int):
+        """Define a altura da janela."""
+        self.__altura = value
+        
+    @altura.getter
+    def altura(self) -> int:
+        return self.__altura
+    
+    @property
+    def largura(self):
+        """Retorna a largura da janela."""
+        return self.__largura
+    
+    @largura.setter
+    def largura(self, value: int):
+        """Define a largura da janela."""
+        self.__largura = value
+        
+    @largura.getter
+    def largura(self) -> int:
+        return self.__largura
+    
     def __bind_events(self):
         """"Private method.: Cria os eventos padrões da janela."""
         events_to_methods = {
@@ -33,7 +64,6 @@ class TForm(tk.Tk):
             '<Double-Button-1>': 'on_double_click',    
             '<Enter>': 'on_enter',
             '<Escape>': 'on_escape_press', 
-            '<Expose>': 'on_show',
             '<FocusIn>': 'on_focus',
             '<FocusOut>': 'on_leave_focus',
             '<Key>': 'on_key_press',
@@ -85,6 +115,9 @@ class TForm(tk.Tk):
         """Evento disparado quando a janela é fechada, use override para implementar."""
         self.destroy()
 
+    def on_show(self):
+        """Evento disparado quando a janela é exibida, use override para implementar."""
+
     def on_create(self, event):
         """Evento disparado quando a janela é criada, use override com super() para implementar."""
         self.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -135,10 +168,6 @@ class TForm(tk.Tk):
 
     def on_mousewheel_click(self, event):
         """Evento disparado quando a janela é clicada com o botão do meio do mouse, use override para implementar."""
-        pass
-
-    def on_show(self, event):
-        """Evento disparado quando a janela é exibida, use override para implementar."""
         pass
 
     def on_resize(self, event):

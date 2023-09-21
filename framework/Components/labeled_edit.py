@@ -1,4 +1,6 @@
 import tkinter as tk
+import sys
+sys.path.append('utils')
 from Frames_Enums.enums import Align_Text, LabelPosition
 
 class TLabeledEntry(tk.Frame):
@@ -8,10 +10,55 @@ class TLabeledEntry(tk.Frame):
         self.__draged = False
         self.label_position = label_position
         self.label_alignment = label_alignment
-        self.label = tk.Label(self, text=label_text)
+        self.label = tk.Label(self)
         self.entry = tk.Entry(self)
+        self.label_text = label_text
+        self.entry_width = kwargs.get('width', 20)
         self.__position_widgets(label_position.value).__align_label(label_alignment, label_position)
         self.__bind_events()
+
+    @property
+    def entry_width(self):
+        """Retorna a largura do campo de entrada."""
+        return self.entry['width']
+
+    @entry_width.setter
+    def entry_width(self, value: int):
+        """Define a largura do campo de entrada."""
+        self.entry.config(width=value)
+
+    @entry_width.getter
+    def entry_width(self) -> int:
+        return self.entry['width']
+
+    @property
+    def label_text(self) -> str:
+        """Retorna o texto do label."""
+        return self.label['text']
+    
+    @label_text.setter
+    def label_text(self, value: str):
+        """Define o texto do label."""
+        self.label.config(text=value)
+        
+    @label_text.getter
+    def label_text(self) -> str:
+        return self.label['text']
+    
+    @property
+    def text(self) -> str:
+        """Retorna o texto do campo de entrada."""
+        return self.entry.get()
+    
+    @text.setter
+    def text(self, value: str):
+        """Define o texto do campo de entrada."""
+        self.entry.delete(0, tk.END)
+        self.entry.insert(0, value)
+        
+    @text.getter
+    def text(self) -> str:
+        return self.entry.get()
 
     def __bind_events(self):
         """Private method.: Cria os eventos do botão.""" 
@@ -87,4 +134,4 @@ class TLabeledEntry(tk.Frame):
     def __align_label(self, label_alignment, label_position):
         self.entry.config(justify=label_alignment.value['justify'])
         if label_position in (LabelPosition.ABOVE, LabelPosition.BELOW):
-            self.label.config(anchor=label_alignment.value['anchor'], width=18) 
+            self.label.config(anchor=label_alignment.value['anchor'], width=self.entry_width) 

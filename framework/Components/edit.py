@@ -67,6 +67,20 @@ class TEdit(Entry):
                     method()
         return handler
 
+    @property
+    def text(self):
+        """Retorna o texto."""
+        return self.get()
+    
+    @text.setter
+    def text(self, value: str):
+        """Define o texto."""
+        self.delete(0, END)
+        self.insert(0, value)
+        
+    @text.getter
+    def text(self):
+        return self.get()
 
     def clear(self):
         """Limpa o texto."""
