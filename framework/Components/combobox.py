@@ -1,10 +1,12 @@
 from tkinter import Menu
-from tkinter.ttk import Combobox
+from tkinter.ttk import Combobox, Style
 
 class TComboBox(Combobox):
     def __init__(self, master: any = None, callback_prefix: str = '', **kwargs) -> None:
         self.callback_prefix = callback_prefix
-        super().__init__(master, **kwargs)
+        super().__init__(master)
+        self.cor_fundo = kwargs.get('bg_color', '#F0F0F0')
+        self.cor_fonte = kwargs.get('fg_color', '#000000')
         self.__draged = False
         self.__bind_events()
 
@@ -31,6 +33,30 @@ class TComboBox(Combobox):
 
         for event, event_type in events.items():
             self.bind(event, self.__create_event_handler(event_type))
+
+    @property
+    def cor_fundo(self):
+        return self.__cor
+    
+    @cor_fundo.setter
+    def cor_fundo(self, color_hex: str):
+        self.__cor = color_hex
+        if self.__cor is not None:
+            Style().configure("TCombobox", fieldbackground=self.__cor)
+            Style().configure("TListbox", background=self.__cor)
+
+    @property
+    def cor_fonte(self):
+        return self.__cor_font
+    
+    @cor_fonte.setter
+    def cor_fonte(self, color_hex: str):
+        self.__cor_font = color_hex
+        if self.__cor_font is not None:
+            Style().configure("TCombobox", background=color_hex)
+            Style().configure("TListbox", foreground=color_hex)
+
+
 
     def add_sub_menu(self, label: str, menu: Menu):
         """Adiciona um submenu ao menu."""

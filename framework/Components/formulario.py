@@ -1,16 +1,18 @@
 from tkinter import Tk
 import tkinter as tk
 import sys
+from ctypes import byref, sizeof, c_int
 sys.path.append('utils')
 from Frames_Enums.enums import Form_Type
 
 class TForm(Tk):
     """Classe base para criação de formulários."""
-    def __init__(self, titulo: str, largura: int, altura: int, icone: str=None, redimensionavel: bool = False, type: Form_Type = Form_Type.CENTRALIZED):
+    def __init__(self, titulo: str, largura: int, altura: int, icone: str=None, redimensionavel: bool = False, type: Form_Type = Form_Type.CENTRALIZED, **kwargs):
         """ Define uma janela principal para a aplicação."""
         super().__init__()
         self.altura = altura
         self.largura = largura
+        self.cor_fundo = kwargs.get('bg_color', '#F0F0F0')
         self.wm_title(titulo)
         if type == Form_Type.CENTRALIZED:
             self.__centralize()
@@ -23,6 +25,16 @@ class TForm(Tk):
         self.on_create()
         self.__bind_events()
         self.on_show()
+
+    @property
+    def cor_fundo(self):
+        return self.__cor
+    
+    @cor_fundo.setter
+    def cor_fundo(self, color_hex: str):
+        self.__cor = color_hex
+        if self.__cor is not None:
+            self.config(background=self.__cor)
 
     @property
     def altura(self):

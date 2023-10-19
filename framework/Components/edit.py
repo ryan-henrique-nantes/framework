@@ -28,6 +28,8 @@ class TEdit(Entry):
     def __init__(self, master: any = None, align: Align_Text = Align_Text.LEFT, callback_prefix: str = '', **kwargs):
         self.callback_prefix = callback_prefix
         super().__init__(master, **kwargs)
+        self.cor_fundo = kwargs.get('bg_color', '#F0F0F0')
+        self.cor_fonte = kwargs.get('fg_color', '#000000')
         self.__draged = False
         self.config(justify=align.value['justify'])
         self.__bind_events()
@@ -66,6 +68,26 @@ class TEdit(Entry):
                 else:
                     method()
         return handler
+
+    @property
+    def cor_fundo(self):
+        return self.__cor
+    
+    @cor_fundo.setter
+    def cor_fundo(self, color_hex: str):
+        self.__cor = color_hex
+        if self.__cor is not None:
+            self.config(bg=self.__cor)
+
+    @property
+    def cor_fonte(self):
+        return self.__cor_font
+    
+    @cor_fonte.setter
+    def cor_fonte(self, color_hex: str):
+        self.__cor_font = color_hex
+        if self.__cor_font is not None:
+            self.config(fg=self.__cor_font)
 
     @property
     def text(self):

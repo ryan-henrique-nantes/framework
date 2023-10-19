@@ -7,10 +7,33 @@ class TMenu(Menu):
         add_lista: Adiciona uma lista de opções ao menu, recebe um label principal, uma lista de labels e uma lista de comandos.
     """
 
-    def __init__(self, master, iscontext: bool=False, tearoff: int=0, type: str='normal'):
+    def __init__(self, master, iscontext: bool=False, tearoff: int=0, type: str='normal', **kwargs):
         super().__init__(master, tearoff=tearoff, type=type)
+        self.cor_fundo = kwargs.get('bg_color', '#F0F0F0')
+        self.cor_fonte = kwargs.get('fg_color', '#000000')
         if iscontext:
             master.bind("<Button-3>", self._show_context_menu)
+
+    @property
+    def cor_fundo(self):
+        return self.__cor
+    
+    @cor_fundo.setter
+    def cor_fundo(self, color_hex: str):
+        self.__cor = color_hex
+        if self.__cor is not None:
+            self.configure(background=self.__cor)
+
+    @property
+    def cor_fonte(self):
+        return self.__cor_font
+    
+    @cor_fonte.setter
+    def cor_fonte(self, color_hex: str):
+        self.__cor_font = color_hex
+        if self.__cor_font is not None:
+            self.configure(foreground=self.__cor_font)
+
 
     def add_sub_menu(self, label: str, menu: Menu):
         """Adiciona um submenu ao menu."""
@@ -20,7 +43,7 @@ class TMenu(Menu):
         """Adiciona uma lista de opções ao menu."""
         opcoes = TMenu(self,  tearoff=0, type='normal')
         for posicao, texto in enumerate(labels):
-            opcoes.add_command(label=texto, command=commands[posicao])
+            opcoes.add_command(label=texto, command=commands[posicao], foreground=self.__cor_font, background=self.__cor)
         self.add_sub_menu(label, opcoes)
 
     def _show_context_menu(self, event):

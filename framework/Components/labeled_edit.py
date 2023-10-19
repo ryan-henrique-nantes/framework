@@ -5,17 +5,43 @@ from Frames_Enums.enums import Align_Text, LabelPosition
 
 class TLabeledEntry(tk.Frame):
     def __init__(self, master,  callback_prefix: str ='', label_position: LabelPosition = LabelPosition.ABOVE, label_alignment: Align_Text = Align_Text.CENTER, label_text="", **kwargs):
-        super().__init__(master, **kwargs)
+        super().__init__(master)
         self.callback_prefix = callback_prefix
         self.__draged = False
         self.label_position = label_position
         self.label_alignment = label_alignment
         self.label = tk.Label(self)
         self.entry = tk.Entry(self)
+        self.cor_fundo = kwargs.get('bg_color', '#F0F0F0')
+        self.cor_fonte = kwargs.get('fg_color', '#000000')
         self.label_text = label_text
         self.entry_width = kwargs.get('width', 20)
         self.__position_widgets(label_position.value).__align_label(label_alignment, label_position)
         self.__bind_events()
+
+
+    @property
+    def cor_fundo(self):
+        return self.__cor
+
+    @cor_fundo.setter
+    def cor_fundo(self, color_hex: str):
+        self.__cor = color_hex
+        if self.__cor is not None:
+            self.config(bg=self.__cor)
+            self.entry.config(bg=self.__cor)
+            self.label.config(bg=self.__cor)
+
+    @property
+    def cor_fonte(self):
+        return self.__cor_font
+    
+    @cor_fonte.setter
+    def cor_fonte(self, color_hex: str):
+        self.__cor_font = color_hex
+        if self.__cor_font is not None:
+            self.entry.config(fg=self.__cor_font)
+            self.label.config(fg=self.__cor_font)
 
     @property
     def entry_width(self):
