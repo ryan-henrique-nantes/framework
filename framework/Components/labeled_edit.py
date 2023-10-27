@@ -1,10 +1,38 @@
+"""Componente LabeledEdit, que é um label com um edit junto"""
 import tkinter as tk
 import sys
 sys.path.append('utils')
 from Frames_Enums.enums import Align_Text, LabelPosition
 
 class TLabeledEntry(tk.Frame):
-    def __init__(self, master,  callback_prefix: str ='', label_position: LabelPosition = LabelPosition.ABOVE, label_alignment: Align_Text = Align_Text.CENTER, label_text="", **kwargs):
+    """Componente Label com Edit, callback_prefix sendo o prefixo que vai usar no inicio
+    de cada evento dele que for chamar, que deve ser seguido de _(nome do evento), ex:
+    _on_change, label_position sendo aonde quer definir a posição do label em relação ao edit: 
+    Above sendo acima, Bellow sendo abaixo, Left sendo a Esquerda e Right a direita, label_alignment
+    sendo o alinhado do texto do edit junto do label, caption sendo o texto do label, também possui
+    bg_color sendo a cor do fundo e fg_color sendo a cor da fonte.
+    Para usar os eventos do botão, cria a def usando o prefixo que passou no parâmetro 'callback_prefix' + '_' + nome do evento.
+    Eventos disponíveis:
+        on_backspace_press: Quando a tecla backspace é pressionada.
+        on_button_release: Quando o botão do mouse é solto.
+        on_click: Quando o botão é clicado.
+        on_drag: Quando o mouse é arrastado.
+        on_drop: Quando o mouse é arrastado e solto.
+        on_double_click: Quando o botão é clicado duas vezes.
+        on_enter: Quando o mouse entra no botão.
+        on_enter_press: Quando a tecla enter/return é pressionada.
+        on_escape_press: Quando a tecla escape é pressionada.
+        on_exit: Quando o mouse sai do botão.
+        on_focus: Quando o botão ganha foco.
+        on_key_press: Quando uma tecla é pressionada.
+        on_key_release: Quando uma tecla é solta.
+        on_left_click: Quando o botão é clicado com o botão esquerdo do mouse.
+        on_mousewheel_click: Quando o botão é clicado com o botão do meio do mouse.
+        on_tab_press: Quando a tecla tab é pressionada.
+        on_unfocus: Quando o botão perde foco."""
+    def __init__(self, master, callback_prefix: str ='', label_position: LabelPosition = 
+                 LabelPosition.ABOVE, label_alignment: Align_Text = Align_Text.CENTER, 
+                 caption="", **kwargs):
         super().__init__(master)
         self.callback_prefix = callback_prefix
         self.__draged = False
@@ -14,7 +42,7 @@ class TLabeledEntry(tk.Frame):
         self.entry = tk.Entry(self)
         self.cor_fundo = kwargs.get('bg_color', '#F0F0F0')
         self.cor_fonte = kwargs.get('fg_color', '#000000')
-        self.label_text = label_text
+        self.caption = caption
         self.entry_width = kwargs.get('width', 20)
         self.__position_widgets(label_position.value).__align_label(label_alignment, label_position)
         self.__bind_events()
@@ -22,10 +50,12 @@ class TLabeledEntry(tk.Frame):
 
     @property
     def cor_fundo(self):
+        """Property da cor de fundo"""
         return self.__cor
 
     @cor_fundo.setter
     def cor_fundo(self, color_hex: str):
+        """Define a cor do fundo"""
         self.__cor = color_hex
         if self.__cor is not None:
             self.config(bg=self.__cor)
@@ -34,10 +64,12 @@ class TLabeledEntry(tk.Frame):
 
     @property
     def cor_fonte(self):
+        """Property da cor da fonte"""
         return self.__cor_font
     
     @cor_fonte.setter
     def cor_fonte(self, color_hex: str):
+        """Define a cor da fonte"""
         self.__cor_font = color_hex
         if self.__cor_font is not None:
             self.entry.config(fg=self.__cor_font)
@@ -45,7 +77,7 @@ class TLabeledEntry(tk.Frame):
 
     @property
     def entry_width(self):
-        """Retorna a largura do campo de entrada."""
+        """Property da largura do campo de entrada."""
         return self.entry['width']
 
     @entry_width.setter
@@ -53,24 +85,16 @@ class TLabeledEntry(tk.Frame):
         """Define a largura do campo de entrada."""
         self.entry.config(width=value)
 
-    @entry_width.getter
-    def entry_width(self) -> int:
-        return self.entry['width']
-
     @property
-    def label_text(self) -> str:
+    def caption(self) -> str:
         """Retorna o texto do label."""
         return self.label['text']
     
-    @label_text.setter
-    def label_text(self, value: str):
+    @caption.setter
+    def caption(self, value: str):
         """Define o texto do label."""
         self.label.config(text=value)
         
-    @label_text.getter
-    def label_text(self) -> str:
-        return self.label['text']
-    
     @property
     def text(self) -> str:
         """Retorna o texto do campo de entrada."""
@@ -82,10 +106,6 @@ class TLabeledEntry(tk.Frame):
         self.entry.delete(0, tk.END)
         self.entry.insert(0, value)
         
-    @text.getter
-    def text(self) -> str:
-        return self.entry.get()
-
     def __bind_events(self):
         """Private method.: Cria os eventos do botão.""" 
         events = {
@@ -151,6 +171,7 @@ class TLabeledEntry(tk.Frame):
         callback = getattr(self.master, method_name, None)
         if callback and callable(callback):
             callback()
+
     def __position_widgets(self, label_position):
         self.label.grid(row=label_position['label_row'], column=label_position['label_column'])
         self.entry.grid(row=label_position['entry_row'], column=label_position['entry_column'])

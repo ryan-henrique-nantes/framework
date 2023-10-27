@@ -2,16 +2,18 @@ from Components.formulario import TForm, Form_Type
 from Components.labeled_edit import TLabeledEntry, LabelPosition, Align_Text
 
 class TESte(TForm):
-    def __init__(self, titulo: str, largura: int, altura: int, redimensionavel: bool = False, type: Form_Type = Form_Type.CENTRALIZED):
-        super().__init__(titulo, largura, altura, redimensionavel, type)
+    def __init__(self):
+        super().__init__(titulo="Teste", altura=300, largura=300, redimensionavel=False, 
+                         type= Form_Type.CENTRALIZED, bg_color='#1C1C1C', fg_color='#FFFFFF')
 
-    def on_create(self, event):
-        self.labeled_entry1 = TLabeledEntry(self, callback_prefix='lbeteste',label_position=LabelPosition.ABOVE, label_alignment=Align_Text.CENTER, label_text="Nome:")
-        return super().on_create(event)
+    def on_create(self):
+        self.labeled_entry1 = TLabeledEntry(self, callback_prefix='lbeteste',label_position=LabelPosition.ABOVE, 
+                                            label_alignment=Align_Text.CENTER, caption="Nome:")
+        return super().on_create()
 
-    def on_show(self, event):
+    def on_show(self):
         self.labeled_entry1.pack(padx=10, pady=10)
-        return super().on_show(event)
+        return super().on_show()
 
     def lbeteste_on_enter(event):
         print("lbeteste_on_enter")
@@ -28,4 +30,4 @@ class TESte(TForm):
     def lbeteste_on_escape_press(event):
         print("lbeteste_on_escape_press")
 
-TESte("Teste", 300, 300, False, Form_Type.FULL_SCREEN).mainloop()
+TESte().mainloop()

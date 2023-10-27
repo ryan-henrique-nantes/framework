@@ -12,7 +12,9 @@ class TForm(Tk):
         super().__init__()
         self.altura = altura
         self.largura = largura
+        self.__components = [] 
         self.cor_fundo = kwargs.get('bg_color', '#F0F0F0')
+        self.cor_fonte = kwargs.get('fg_color', '#000000')
         self.wm_title(titulo)
         if type == Form_Type.CENTRALIZED:
             self.__centralize()
@@ -27,6 +29,12 @@ class TForm(Tk):
         self.on_show()
 
     @property
+    def components(self):
+        return self.all_children(self)
+
+    def all_children(self, widget): return [widget] + [subchild for child in widget.winfo_children() for subchild in self.all_children(child)]
+    
+    @property
     def cor_fundo(self):
         return self.__cor
     
@@ -35,6 +43,16 @@ class TForm(Tk):
         self.__cor = color_hex
         if self.__cor is not None:
             self.config(background=self.__cor)
+
+    @property
+    def cor_fonte(self):
+        """Propety da cor da fonte do botão"""
+        return self.__cor_font
+
+    @cor_fonte.setter
+    def cor_fonte(self, color_hex: str):
+        """Define a cor da fonte do botão"""
+        self.__cor_font = color_hex          
 
     @property
     def altura(self):
@@ -46,10 +64,6 @@ class TForm(Tk):
         """Define a altura da janela."""
         self.__altura = value
         
-    @altura.getter
-    def altura(self) -> int:
-        return self.__altura
-    
     @property
     def largura(self):
         """Retorna a largura da janela."""
@@ -60,10 +74,6 @@ class TForm(Tk):
         """Define a largura da janela."""
         self.__largura = value
         
-    @largura.getter
-    def largura(self) -> int:
-        return self.__largura
-    
     def __bind_events(self):
         """"Private method.: Cria os eventos padrões da janela."""
         events_to_methods = {
@@ -129,8 +139,13 @@ class TForm(Tk):
 
     def on_show(self):
         """Evento disparado quando a janela é exibida, use override para implementar."""
+        if self.__cor_font is not None:
+            for component in self.components:
+                component.cor_fundo = self.cor_fundo
+                component.cor_fonte = self.cor_fonte  
 
-    def on_create(self, event):
+
+    def on_create(self):
         """Evento disparado quando a janela é criada, use override com super() para implementar."""
         self.protocol("WM_DELETE_WINDOW", self.on_close)
 

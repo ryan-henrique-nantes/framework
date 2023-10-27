@@ -56,20 +56,24 @@ class TButton(Button):
 
     @property
     def cor_fundo(self):
+        """Property da cor de fundo do botão"""
         return self.__cor
     
     @cor_fundo.setter
     def cor_fundo(self, color_hex: str):
+        """Define a cor de fundo do botão"""
         self.__cor = color_hex
         if self.__cor is not None:
             self.config(bg=self.__cor)
 
     @property
     def cor_fonte(self):
+        """Propety da cor da fonte do botão"""
         return self.__cor_font
     
     @cor_fonte.setter
     def cor_fonte(self, color_hex: str):
+        """Define a cor da fonte do botão"""
         self.__cor_font = color_hex
         if self.__cor_font is not None:
             self.config(fg=self.__cor_font)
