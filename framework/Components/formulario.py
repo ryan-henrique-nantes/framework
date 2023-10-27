@@ -140,9 +140,11 @@ class TForm(Tk):
     def on_show(self):
         """Evento disparado quando a janela é exibida, use override para implementar."""
         if self.__cor_font is not None:
-            for component in self.components:
-                component.cor_fundo = self.cor_fundo
-                component.cor_fonte = self.cor_fonte  
+            for component in self.winfo_children():
+                if component.cor_fundo == '#F0F0F0':
+                    component.cor_fundo = self.cor_fundo
+                if component.cor_fonte == '#000000':
+                    component.cor_fonte = self.cor_fonte  
 
 
     def on_create(self):

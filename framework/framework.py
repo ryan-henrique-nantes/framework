@@ -9,6 +9,7 @@ class TESte(TForm):
     def on_create(self):
         self.labeled_entry1 = TLabeledEntry(self, callback_prefix='lbeteste',label_position=LabelPosition.ABOVE, 
                                             label_alignment=Align_Text.CENTER, caption="Nome:")
+        self.labeled_entry1.cor_fonte = '#0000FF'
         return super().on_create()
 
     def on_show(self):
